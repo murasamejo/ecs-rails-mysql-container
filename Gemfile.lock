@@ -171,7 +171,6 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     thor (1.1.0)
     tilt (2.0.10)
     turbolinks (5.2.1)
@@ -204,26 +203,21 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  bootsnap (>= 1.4.4)
+  bootsnap
   byebug
-  capybara (>= 3.26)
-  jbuilder (~> 2.7)
-  listen (~> 3.3)
-  puma (~> 5.0)
-  rack-mini-profiler (~> 2.0)
-  rails (~> 6.1.4, >= 6.1.4.1)
-  sass-rails (>= 6)
+  capybara
+  jbuilder
+  listen
+  puma
+  rack-mini-profiler
+  rails
+  sass-rails
   selenium-webdriver
   spring
-  sqlite3 (~> 1.4)
-  turbolinks (~> 5)
-  tzinfo-data
-  web-console (>= 4.1.0)
+  turbolinks
+  web-console
   webdrivers
-  webpacker (~> 5.0)
-
-RUBY VERSION
-   ruby 3.0.3p157
+  webpacker
 
 BUNDLED WITH
    2.2.32
