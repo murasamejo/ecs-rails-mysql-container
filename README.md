@@ -4,9 +4,13 @@
 - Redis
 
 # 注意点
+- Docker で開発をする場合は未来永劫 Docker を使うこと
+  - ローカルで `.bundle` を作ったりすると gem が見つからなかったりしてハマる
+  - どうしてもローカルで開発したい場合は別ディレクトリを作る
 - `localhost` は使えない
   - [Dockerで立ち上げたmysqldに接続する | ハックノート](https://hacknote.jp/archives/30781/)
 - `volume` オプションにおいて、ホスト側では相対パスを使えない
+  - なので `$PWD` を使うことが必須
   - Docker Compose だとそこを内部でよしなにやってくれている？
 - MySQL のユーザー名は不要だがパスワードは明示的に指定する必要がある
   - MySQL および Rails のコンテナを作る時に環境変数で指定する
@@ -116,4 +120,41 @@ Rails 7.0.0
 ```bash
 $ docker container exec nikukyu-rails bin/rails db:create
 $ docker container exec nikukyu-rails bin/rails db:migrate
+```
+
+## ソースコードが変更された場合（git 操作を行う場合）はどうしたらいいか？
+- そもそも Rails のコンテナを作る際にホスト側で永続化してる必要がある
+  - MySQL も同様
+  - `-v $PWD:/myapp`
+- 永続化したならばホスト側で git コマンドを普通に使うことができる
+
+## コマンドまとめ
+
+### コンテナ構築
+
+```bash
+$ docker container run -d -v $PWD:/myapp -p 3000:3000 --name nikukyu-rails --network nikukyu-network -e MYSQL_HOST=nikukyu-mysql-host -e MYSQL_PASSWORD=my-secret-pw nikukyugamer/rails-on-ecs:0.0.1
+$ docker container run -d --name nikukyu-mysql --hostname nikukyu-mysql-host --network nikukyu-network -v /tmp/nikukyu_mysql_data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql:5.7.36
+```
+
+### コンテナに入る
+```bash
+$ docker container exec -it nikukyu-rails /bin/bash
+```
+
+### サーバ再起動
+```bash
+$ docker container restart nikukyu-rails
+```
+
+### Rails コマンド実行
+```bash
+$ docker container exec nikukyu-rails bin/bundle install
+$ docker container exec nikukyu-rails bin/rails db:create
+$ docker container exec nikukyu-rails bin/rails db:migrate
+```
+
+### コンテナを止める
+```bash
+$ docker container stop nikukyu-rails nikukyu-mysql && docker container rm nikukyu-rails nikukyu-mysql
 ```
