@@ -1,4 +1,4 @@
-FROM ruby:3.0
+FROM ruby:3.1
 
 # TODO: Node.js はバージョンが指定できるように、公式から引っ張ってくるようにする
 RUN apt update -qq && apt install -y nodejs
