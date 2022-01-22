@@ -1,4 +1,6 @@
 # イメージを作る際に無視するファイルやディレクトリ
+.mysql_data/*
+
 /.bundle
 vendor/
 

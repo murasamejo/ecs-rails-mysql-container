@@ -2,9 +2,9 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: <%= ENV['RAILS_MAX_THREADS'] || 5 %>
-  username: <%= ENV['MYSQL_USERNAME'] %>
-  password: <%= ENV['MYSQL_PASSWORD'] %>
-  host: <%= ENV['MYSQL_HOST'] || 'localhost' %>
+  username: <%= ENV['MYSQL_USERNAME'] || 'deploy_ecs_user' %>
+  password: <%= ENV['MYSQL_PASSWORD'] || 'deploy_ecs_password' %>
+  host: <%= ENV['MYSQL_HOST'] || 'db' %>
 
 development:
   <<: *default

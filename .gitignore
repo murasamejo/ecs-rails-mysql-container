@@ -1,3 +1,5 @@
+.mysql_data/*
+
 /.bundle
 vendor/
 

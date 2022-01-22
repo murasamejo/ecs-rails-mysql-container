@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  web:
+    # TODO: リポジトリに push できるようになったらそっちから持ってくるようにしたい
+    # image: foo.bar/hoge/fuga:latest
+    build:
+      context: .
+      # args:
+      #   - HOGE=FUGA
+    container_name: ecr_rails_mysql_web
+    volumes:
+      - type: bind
+        source: ./
+        target: /myapp
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+  db:
+    image: mysql/mysql-server:8.0.28
+    platform: linux/amd64
+    container_name: ecr_rails_mysql_docker
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --secure-file-priv=""
+    environment:
+      - MYSQL_ROOT_PASSWORD=notSecureChangeMe
+      - MYSQL_USER=deploy_ecs_user
+      - MYSQL_PASSWORD=deploy_ecs_password
+      # ECS へのデプロイ時には production にする
+      - MYSQL_DATABASE=deploy_ecs_development
+    ports:
+      - ${DATABASE_PORT:-13306}:3306
+    volumes:
+      - type: bind
+        source: ./docker_mysql_init_scripts
+        target: /docker-entrypoint-initdb.d
+      - type: bind
+        source: ./.mysql_data
+        target: /var/lib/mysql
